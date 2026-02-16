@@ -19,7 +19,7 @@ import os
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from core.views import UserViewSet, TeamViewSet, ActivityViewSet, WorkoutViewSet, LeaderboardViewSet
 
 
@@ -29,6 +29,7 @@ router.register(r'teams', TeamViewSet)
 router.register(r'activities', ActivityViewSet)
 router.register(r'workouts', WorkoutViewSet)
 router.register(r'leaderboards', LeaderboardViewSet)
+
 
 # API root endpoint that returns the correct codespace URL using $CODESPACE_NAME
 def api_root(request):
@@ -46,7 +47,12 @@ def api_root(request):
         "leaderboards": base_url + "leaderboards/",
     })
 
+# Simple homepage view
+def homepage(request):
+    return HttpResponse("<h1>Welcome to Octofit Tracker Backend!</h1><p>This is the API server. Visit <a href='/api/'>/api/</a> for the API root.</p>")
+
 urlpatterns = [
+    path('', homepage, name='homepage'),
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/', api_root, name='api-root'),
